@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".MainActivity">
+
+
+    <!--地图-->
+
+    <!--浮动按钮 跳转路线Activity-->
+    <com.amap.api.maps.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:onClick="jumpRouteActivity"
+        android:src="@drawable/icon_route"
+        app:backgroundTint="#FFF"
+        app:backgroundTintMode="screen"
+        app:fabSize="mini"
+        app:hoveredFocusedTranslationZ="18dp"
+        app:pressedTranslationZ="18dp" />
+
+
+</RelativeLayout>
