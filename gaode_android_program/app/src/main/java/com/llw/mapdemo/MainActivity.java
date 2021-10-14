@@ -19,6 +19,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     private AMap aMap = null;
     //位置更改监听
     private LocationSource.OnLocationChangedListener mListener;
-
+    //定义一个UiSettings对象
+    private UiSettings mUiSettings;
 
 
     @Override
@@ -231,7 +233,10 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
 //        aMap.setMinZoomLevel(20);
 
         //开启室内地图
-        aMap.showIndoorMap(true);
+//        aMap.showIndoorMap(true);
+        mUiSettings = aMap.getUiSettings();
+        mUiSettings.setZoomControlsEnabled(false);
+
 
     }
 

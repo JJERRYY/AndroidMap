@@ -2,16 +2,16 @@ package com.llw.mapdemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
@@ -27,7 +27,7 @@ import com.amap.api.maps.model.MyLocationStyle;
  * @author llw
  */
 public class RouteActivity extends AppCompatActivity implements
-        AMapLocationListener,LocationSource {
+        AMapLocationListener,LocationSource,AMap.OnMapClickListener {
 
     private static final String TAG = "RouteActivity";
     //地图
@@ -87,13 +87,13 @@ public class RouteActivity extends AppCompatActivity implements
         //初始化地图控制器对象
         aMap = mapView.getMap();
         //设置最小缩放等级为16 ，缩放级别范围为[3, 20]
-//        aMap.setMinZoomLevel(20);
         //开启室内地图
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
         aMap.showIndoorMap(true);
         //实例化UiSettings类对象
         mUiSettings = aMap.getUiSettings();
         //隐藏缩放按钮 默认显示
-        mUiSettings.setZoomControlsEnabled(false);
+//        mUiSettings.setZoomControlsEnabled(false);
         //显示比例尺 默认不显示
         mUiSettings.setScaleControlsEnabled(true);
         // 自定义定位蓝点图标
@@ -104,16 +104,41 @@ public class RouteActivity extends AppCompatActivity implements
         aMap.setLocationSource(this);
         // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         aMap.setMyLocationEnabled(true);
-
+        //地图点击
+//        aMap.setOnMapClickListener(this);
 
 // 将点标记添加到地图map上
 
+        LatLng latlng5 = new LatLng(30.31171287210056,120.39243819985757);
+        LatLng latlng6 = new LatLng(30.309606874393683,120.39414408476185);
+        LatLng latlng7 = new LatLng(30.310309650512067,120.3919339445714);
+        LatLng latlng8 = new LatLng(30.310316597203077,120.38960310497734);
+        LatLng latlng9 = new LatLng(30.30952582904772,120.38964333811187);
+        LatLng latlng10 = new LatLng(30.31029691491061,120.39230274830463);
+        LatLng latlng11 = new LatLng(30.309415838828155,120.39158793961441);
+        LatLng latlng12 = new LatLng(30.307214850698266,120.39243015323066);
+        LatLng latlng13 = new LatLng(30.30836455765973,120.39044800080258);
+        aMap.addMarker(new MarkerOptions().position(latlng5).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng6).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng7).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng8).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng9).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng10).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng11).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng12).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng13).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
 
-        LatLng latlng = new LatLng(30.313774,120.395356);
-        aMap.addMarker(new MarkerOptions().position(latlng).title("WC1(厕所)"));
+        LatLng latlng4 = new LatLng(30.307188220870692,120.3908248511627);
+        aMap.addMarker(new MarkerOptions().position(latlng4).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
 
-        LatLng latlng2 = new LatLng(30.313408,120.396986);
-        aMap.addMarker(new MarkerOptions().position(latlng2).title("WC2(厕所)"));
+        LatLng latlng3 = new LatLng(30.307353788811767,120.39008053817382);
+        aMap.addMarker(new MarkerOptions().position(latlng3).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+
+        LatLng latlng = new LatLng(30.30730863394648,120.38926514664752);
+        aMap.addMarker(new MarkerOptions().position(latlng).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+
+        LatLng latlng2 = new LatLng(30.307601561292117,120.38861068765878);
+        aMap.addMarker(new MarkerOptions().position(latlng2).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
 
     }
 
@@ -194,5 +219,25 @@ public class RouteActivity extends AppCompatActivity implements
         }
         mapView.onDestroy();
     }
+
+    private void showMsg(String msg){
+        Toast.makeText(this,msg, Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * 地图单击事件
+     * @param latLng
+     */
+    @Override
+    public void onMapClick(LatLng latLng) {
+        showMsg("点击了地图，经度："+latLng.longitude+"，纬度："+latLng.latitude);
+    }
+
+
+
+
+
+
 }
 
