@@ -17,9 +17,13 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
@@ -233,10 +237,42 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
 //        aMap.setMinZoomLevel(20);
 
         //开启室内地图
-//        aMap.showIndoorMap(true);
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+        aMap.showIndoorMap(true);
         mUiSettings = aMap.getUiSettings();
-        mUiSettings.setZoomControlsEnabled(false);
+        mUiSettings.setScaleControlsEnabled(true);
+// 将点标记添加到地图map上
 
+        LatLng latlng5 = new LatLng(30.31171287210056,120.39243819985757);
+        LatLng latlng6 = new LatLng(30.309606874393683,120.39414408476185);
+        LatLng latlng7 = new LatLng(30.310309650512067,120.3919339445714);
+        LatLng latlng8 = new LatLng(30.310316597203077,120.38960310497734);
+        LatLng latlng9 = new LatLng(30.30952582904772,120.38964333811187);
+        LatLng latlng10 = new LatLng(30.31029691491061,120.39230274830463);
+        LatLng latlng11 = new LatLng(30.309415838828155,120.39158793961441);
+        LatLng latlng12 = new LatLng(30.307214850698266,120.39243015323066);
+        LatLng latlng13 = new LatLng(30.30836455765973,120.39044800080258);
+        aMap.addMarker(new MarkerOptions().position(latlng5).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng6).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng7).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng8).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng9).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng10).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng11).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng12).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng13).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+
+        LatLng latlng4 = new LatLng(30.307188220870692,120.3908248511627);
+        aMap.addMarker(new MarkerOptions().position(latlng4).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+
+        LatLng latlng3 = new LatLng(30.307353788811767,120.39008053817382);
+        aMap.addMarker(new MarkerOptions().position(latlng3).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+
+        LatLng latlng = new LatLng(30.30730863394648,120.38926514664752);
+        aMap.addMarker(new MarkerOptions().position(latlng).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+
+        LatLng latlng2 = new LatLng(30.307601561292117,120.38861068765878);
+        aMap.addMarker(new MarkerOptions().position(latlng2).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
 
     }
 
@@ -265,13 +301,7 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     }
 
 
-    /**
-     * 进入路线规划
-     * @param view
-     */
-    public void jumpRouteActivity(View view) {
-        startActivity(new Intent(this,RouteActivity.class));
-    }
+
 
 
 
