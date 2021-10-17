@@ -5,18 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    style="@style/Theme.HelloWorld">
 
-
-    <!--地图-->
-
-    <!--浮动按钮 跳转路线Activity-->
     <com.amap.api.maps.MapView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignBottom="@id/map_view"
+        android:background="@color/white">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_go"
+            android:text="一键出恭"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/organe">
+        </com.google.android.material.button.MaterialButton>
+    </RelativeLayout>
 
 
 </RelativeLayout>
