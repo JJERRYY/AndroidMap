@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,24 +19,35 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeAddress;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends AppCompatActivity implements AMapLocationListener,LocationSource {
+public class MainActivity extends AppCompatActivity implements AMapLocationListener,LocationSource,AMap.OnMarkerClickListener,GeocodeSearch.OnGeocodeSearchListener {
     //请求权限码
     private static final int REQUEST_PERMISSIONS = 9527;
     //声明AMapLocationClient类对象
@@ -49,7 +62,12 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     private LocationSource.OnLocationChangedListener mListener;
     //定义一个UiSettings对象
     private UiSettings mUiSettings;
-
+    public LatLng s;
+    //地理编码搜索
+    private GeocodeSearch geocodeSearch;
+    //解析成功标识码
+    private static final int PARSE_SUCCESS_CODE = 1000;
+    private String add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         checkingAndroidVersion();
 
 
-
     }
     /**
      * 检查Android版本
@@ -72,10 +89,10 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     private void checkingAndroidVersion() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             //Android6.0及以上先获取权限再定位
-          requestPermission();
+            requestPermission();
         }else {
             //Android6.0以下直接定位
-         mLocationClient.startLocation();
+            mLocationClient.startLocation();
 
 //         mLocationClient.stopLocation();
 
@@ -166,7 +183,9 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
                 //获取维度
                 double latitude=aMapLocation.getLatitude();
                 //获取经度
+
                 double longitude=aMapLocation.getLongitude();
+                s=new LatLng(latitude,longitude);
                 StringBuffer stringBuffer=new StringBuffer();
                 stringBuffer.append("纬度：" + latitude + "\n");
                 stringBuffer.append("经度：" + longitude + "\n");
@@ -227,6 +246,8 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         //初始化地图控制器对象
         aMap = mapView.getMap();
 
+        geocodeSearch=new GeocodeSearch(this);
+        geocodeSearch.setOnGeocodeSearchListener(this);
         // 设置定位监听
         aMap.setLocationSource(this);
         // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
@@ -234,10 +255,15 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
 //        aMap.setMinZoomLevel(20);
 
         //开启室内地图
+        aMap.moveCamera(CameraUpdateFactory.changeTilt(42));
         aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
         aMap.showIndoorMap(true);
         mUiSettings = aMap.getUiSettings();
         mUiSettings.setScaleControlsEnabled(true);
+
+
+        aMap.setOnMarkerClickListener(this);
+
 // 将点标记添加到地图map上
 
         LatLng latlng5 = new LatLng(30.31171287210056,120.39243819985757);
@@ -270,7 +296,6 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
 
         LatLng latlng2 = new LatLng(30.307601561292117,120.38861068765878);
         aMap.addMarker(new MarkerOptions().position(latlng2).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
-
     }
 
     /**
@@ -297,12 +322,43 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         mLocationClient = null;
     }
 
+    /**
+     * 地址转坐标
+     * @param geocodeResult
+     * @param rCode
+     */
+    @Override
+    public void onGeocodeSearched(GeocodeResult geocodeResult, int rCode) {
 
+    }
 
+    private void latlonToAddress(LatLng latLng) {
+        //位置点  通过经纬度进行构建
+        LatLonPoint latLonPoint = new LatLonPoint(latLng.latitude, latLng.longitude);
+        //逆编码查询  第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 5, GeocodeSearch.AMAP);
+        //异步获取地址信息
+        geocodeSearch.getFromLocationAsyn(query);
+    }
+    @Override
+    public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int rCode) {
+        //解析result获取地址描述信息
+        if (rCode == PARSE_SUCCESS_CODE) {
+            RegeocodeAddress regeocodeAddress = regeocodeResult.getRegeocodeAddress();
+            //显示解析后的地
+            add=regeocodeAddress.getFormatAddress();
+        } else {
+            showMsg("获取地址失败");
+        }
 
+    }
 
-
-
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        latlonToAddress(marker.getPosition());
+        showMsg("名称："+marker.getTitle()+"\n地址："+add+"\n距离："+ AMapUtils.calculateLineDistance(s, marker.getPosition())+"米");
+        return true;
+    }
 
 
 }
