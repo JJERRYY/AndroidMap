@@ -26,6 +26,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- 定位service -->
+        <activity android:name=".WalkRouteActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".WalkRouteDetailActivity"
+            android:screenOrientation="portrait" />
+
+
+
         <service android:name="com.amap.api.location.APSService" /> <!-- 设置高德Key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"

@@ -100,9 +100,6 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
             showMsg("已获得权限，可以定位啦！");
             mLocationClient.startLocation();
             //停止定位后，本地定位服务并不会被销毁
-
-
-
         } else {
             //false 无权限
             EasyPermissions.requestPermissions(this, "需要权限", REQUEST_PERMISSIONS, permissions);

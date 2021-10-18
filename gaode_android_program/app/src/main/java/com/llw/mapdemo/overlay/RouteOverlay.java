@@ -1,4 +1,4 @@
-package com.llw.mapdemo;
+package com.llw.mapdemo.overlay;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,6 +14,7 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
+import com.llw.mapdemo.R;
 
 
 import java.util.ArrayList;
