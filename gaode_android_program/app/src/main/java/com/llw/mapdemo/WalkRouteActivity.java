@@ -40,8 +40,8 @@ public class WalkRouteActivity extends Activity implements OnMapClickListener,
     private Context mContext;
     private RouteSearch mRouteSearch;
     private WalkRouteResult mWalkRouteResult;
-    private LatLonPoint mStartPoint = new LatLonPoint(39.996678,116.479271);//起点，39.996678,116.479271
-    private LatLonPoint mEndPoint = new LatLonPoint(39.997796,116.468939);//终点，39.997796,116.468939
+    private LatLonPoint mStartPoint = null;
+    private LatLonPoint mEndPoint = null;
     private final int ROUTE_TYPE_WALK = 3;
 
     private RelativeLayout mBottomLayout, mHeadLayout;
@@ -57,6 +57,12 @@ public class WalkRouteActivity extends Activity implements OnMapClickListener,
         mapView = (MapView) findViewById(R.id.route_map);
         mapView.onCreate(bundle);// 此方法必须重写
         init();
+        Intent intent =getIntent();
+        Bundle bundle1 = intent.getExtras();
+        double[] start = bundle1.getDoubleArray("start");
+        double[] end = bundle1.getDoubleArray("end");
+        mStartPoint = new LatLonPoint(start[0],start[1]);
+        mEndPoint = new LatLonPoint(end[0],end[1]);
     }
 
     /**

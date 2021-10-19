@@ -2,11 +2,10 @@ package com.llw.mapdemo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 
 import android.Manifest;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,20 +28,15 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
-import com.amap.api.services.poisearch.PoiResult;
-import com.amap.api.services.poisearch.PoiSearch;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.lang.reflect.Array;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -62,21 +56,25 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     private LocationSource.OnLocationChangedListener mListener;
     //定义一个UiSettings对象
     private UiSettings mUiSettings;
-    public LatLng s;
+    public LatLng myLocation;
     //地理编码搜索
     private GeocodeSearch geocodeSearch;
     //解析成功标识码
     private static final int PARSE_SUCCESS_CODE = 1000;
     private String add;
-
+    private NestedScrollView bottomSheet = null;
+    private TextView textName = null;
+    private TextView textDistance = null;
+    private FloatingActionButton fab_plan = null;
+    private Marker preMarker = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 //        tvContent = findViewById(R.id.tv_content);
-        mapView=findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);
+//        mapView=findViewById(R.id.map_view);
+//        mapView.onCreate(savedInstanceState);
         initLocation();
         initMap(savedInstanceState);
         checkingAndroidVersion();
@@ -167,6 +165,14 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         mLocationOption.setLocationCacheEnable(false);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
+
+        fab_plan =(FloatingActionButton) findViewById(R.id.fab_plan);
+        textName = (TextView) findViewById(R.id.text_name);
+        textName.setText("我的位置");
+        textDistance = (TextView) findViewById(R.id.text_distance);
+        bottomSheet = (NestedScrollView) findViewById(R.id.bottom_sheet_main);
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     /**
@@ -183,9 +189,8 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
                 //获取维度
                 double latitude=aMapLocation.getLatitude();
                 //获取经度
-
                 double longitude=aMapLocation.getLongitude();
-                s=new LatLng(latitude,longitude);
+                myLocation =new LatLng(latitude,longitude);
                 StringBuffer stringBuffer=new StringBuffer();
                 stringBuffer.append("纬度：" + latitude + "\n");
                 stringBuffer.append("经度：" + longitude + "\n");
@@ -355,9 +360,43 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+
         latlonToAddress(marker.getPosition());
-        showMsg("名称："+marker.getTitle()+"\n地址："+add+"\n距离："+ AMapUtils.calculateLineDistance(s, marker.getPosition())+"米");
-        return true;
+
+        showMsg("名称："+marker.getTitle()+"\n地址："+add+"\n距离："+ AMapUtils.calculateLineDistance(myLocation, marker.getPosition())+"米");
+
+        textName.setText(marker.getTitle());
+        if (marker != null) {
+            float distance = AMapUtils.calculateLineDistance(myLocation, marker.getPosition());
+            textDistance.setText(String.format("%s",
+                    "距离" + distance));
+        } else {
+            textDistance.setText("距离不详");
+        }
+
+        fab_plan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Bundle bundle = new Bundle();
+            bundle.putDoubleArray("start",new double[]{myLocation.latitude,myLocation.longitude});
+            bundle.putDoubleArray("end",new double[]{marker.getPosition().latitude,marker.getPosition().longitude});
+            Intent intent = new Intent(getBaseContext(),WalkRouteActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            }
+        });
+
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
+        if (preMarker!=null&&preMarker.equals(marker)&&
+                behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+
+        preMarker = marker;
+        return false;
+
     }
 
 
