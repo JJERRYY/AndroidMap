@@ -2,14 +2,18 @@ package com.llw.mapdemo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +22,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
@@ -27,6 +32,7 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
@@ -35,6 +41,9 @@ import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.llw.mapdemo.util.AMapUtil;
 
 import java.lang.reflect.Array;
 
@@ -52,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     private MapView mapView;
     //地图控制器
     private AMap aMap = null;
+    private int MyLocationType;
     //位置更改监听
     private LocationSource.OnLocationChangedListener mListener;
     //定义一个UiSettings对象
@@ -66,7 +76,12 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     private TextView textName = null;
     private TextView textDistance = null;
     private FloatingActionButton fab_plan = null;
+    private FloatingActionButton fab_locate = null;
     private Marker preMarker = null;
+    private NavigationView navigationView = null;
+    private DrawerLayout drawerLayout = null;
+    private ImageButton menu = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,13 +181,19 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
 
-        fab_plan =(FloatingActionButton) findViewById(R.id.fab_plan);
         textName = (TextView) findViewById(R.id.text_name);
         textName.setText("我的位置");
         textDistance = (TextView) findViewById(R.id.text_distance);
         bottomSheet = (NestedScrollView) findViewById(R.id.bottom_sheet_main);
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        fab_locate = (FloatingActionButton) findViewById(R.id.fab_locate);
+        fab_plan =(FloatingActionButton) findViewById(R.id.fab_plan);
+        navigationView = (NavigationView) findViewById(R.id.navigate_view);
+        navigationView.setCheckedItem(R.id.map_standard);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        menu = (ImageButton) findViewById(R.id.expanded_menu);
+
     }
 
     /**
@@ -258,6 +279,8 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         aMap.setMyLocationEnabled(true);
 //        aMap.setMinZoomLevel(20);
+        aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
+        MyLocationType = AMap.LOCATION_TYPE_LOCATE;
 
         //开启室内地图
         aMap.moveCamera(CameraUpdateFactory.changeTilt(42));
@@ -265,8 +288,61 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         aMap.showIndoorMap(true);
         mUiSettings = aMap.getUiSettings();
         mUiSettings.setScaleControlsEnabled(true);
+        mUiSettings.setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_CENTER);
+        fab_locate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (myLocation != null) {
+                    aMap.animateCamera(CameraUpdateFactory.newLatLng(myLocation));
+                    latlonToAddress(myLocation);
+                } else {
+                    Snackbar.make(mapView, "定位失败。请检查您的设置。",
+                            Snackbar.LENGTH_SHORT).show();
+                }
 
-
+                if(MyLocationType==AMap.LOCATION_TYPE_LOCATE){
+                    aMap.setMyLocationType(AMap.LOCATION_TYPE_MAP_ROTATE);
+                }else{
+                    aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
+                }
+            }
+        });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    //白昼地图（即普通地图），aMap是地图控制器对象。
+                    case R.id.map_standard:
+                        aMap.setMapType(AMap.MAP_TYPE_NORMAL);
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    //夜景地图，aMap是地图控制器对象。
+                    case R.id.map_night:
+                        aMap.setMapType(AMap.MAP_TYPE_NIGHT);
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    //显示实时路况图层，aMap是地图控制器对象。
+                    case R.id.map_satellite:
+                        aMap.setTrafficEnabled(true);
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    // 设置卫星地图模式，aMap是地图控制器对象。
+                    case R.id.map_SATELLITE:
+                        aMap.setMapType(AMap.MAP_TYPE_SATELLITE);
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    default:
+                }
+                return true;
+            }
+        });
+        menu = (ImageButton) findViewById(R.id.expanded_menu);
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
         aMap.setOnMarkerClickListener(this);
 
 // 将点标记添加到地图map上
@@ -345,6 +421,14 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         //异步获取地址信息
         geocodeSearch.getFromLocationAsyn(query);
     }
+    //开始地理位置逆编码
+    private void geocodeSearch(LatLonPoint location) {
+        final GeocodeSearch geocodeSearch = new GeocodeSearch(this);
+        geocodeSearch.setOnGeocodeSearchListener(this);
+        final RegeocodeQuery query = new RegeocodeQuery(location, 50, GeocodeSearch.AMAP);
+        geocodeSearch.getFromLocationAsyn(query);
+    }
+
     @Override
     public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int rCode) {
         //解析result获取地址描述信息

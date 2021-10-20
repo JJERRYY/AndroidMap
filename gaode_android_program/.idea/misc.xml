@@ -7,7 +7,9 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10099637681159421" />
         <entry key="app/src/main/res/layout/activity_route_detail.xml" value="0.12864583333333332" />
         <entry key="app/src/main/res/layout/item_bus_segment.xml" value="0.12864583333333332" />
+        <entry key="app/src/main/res/layout/map_header.xml" value="0.11041666666666666" />
         <entry key="app/src/main/res/layout/route_activity.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/map_menu.xml" value="0.11041666666666666" />
       </map>
     </option>
   </component>
