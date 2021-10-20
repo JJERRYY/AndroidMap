@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //去掉顶部标题
+        getSupportActionBar().hide();
+
         setContentView(R.layout.activity_main);
 
 //        tvContent = findViewById(R.id.tv_content);
@@ -302,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
 
                 if(MyLocationType==AMap.LOCATION_TYPE_LOCATE){
                     aMap.setMyLocationType(AMap.LOCATION_TYPE_MAP_ROTATE);
-                }else{
+                }else if (MyLocationType==AMap.LOCATION_TYPE_MAP_ROTATE){
                     aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
                 }
             }

@@ -12,8 +12,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     tools:context=".MainActivity"
-    style="@style/Theme.HelloWorld"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+    style="@style/Theme.HelloWorld">
     <com.amap.api.maps.MapView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
@@ -29,13 +28,19 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_my_location_black_48dp"/>
+    <com.lihang.ShadowLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:hl_shadowLimit="20dp"
+        app:hl_cornerRadius="20dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="35dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/border">
 
             <ImageButton
@@ -58,7 +63,7 @@
                 android:padding="10dp" />
 
         </LinearLayout>
-
+    </com.lihang.ShadowLayout>
     <androidx.core.widget.NestedScrollView
         android:id="@+id/bottom_sheet_main"
         android:layout_width="match_parent"
