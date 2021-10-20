@@ -356,27 +356,27 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
         LatLng latlng11 = new LatLng(30.309415838828155,120.39158793961441);
         LatLng latlng12 = new LatLng(30.307214850698266,120.39243015323066);
         LatLng latlng13 = new LatLng(30.30836455765973,120.39044800080258);
-        aMap.addMarker(new MarkerOptions().position(latlng5).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
-        aMap.addMarker(new MarkerOptions().position(latlng6).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
-        aMap.addMarker(new MarkerOptions().position(latlng7).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
-        aMap.addMarker(new MarkerOptions().position(latlng8).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
-        aMap.addMarker(new MarkerOptions().position(latlng9).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
-        aMap.addMarker(new MarkerOptions().position(latlng10).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
-        aMap.addMarker(new MarkerOptions().position(latlng11).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
-        aMap.addMarker(new MarkerOptions().position(latlng12).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
-        aMap.addMarker(new MarkerOptions().position(latlng13).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng5).title("浙江工商大学钱江湾生活区厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng6).title("浙江工商大学教学区管理楼厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng7).title("浙江工商大学教学区C楼厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng8).title("浙江工商大学教学区图书馆厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng9).title("浙江工商大学教学区图书馆厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng10).title("浙江工商大学教学区C楼东厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng11).title("浙江工商大学教学区A楼厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng12).title("浙江工商大学教学区逸夫楼厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng13).title("浙江工商大学教学区文科实验楼厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
 
         LatLng latlng4 = new LatLng(30.307188220870692,120.3908248511627);
-        aMap.addMarker(new MarkerOptions().position(latlng4).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng4).title("浙江工商大学教学区贝因美楼厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
 
         LatLng latlng3 = new LatLng(30.307353788811767,120.39008053817382);
-        aMap.addMarker(new MarkerOptions().position(latlng3).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng3).title("浙江工商大学教学区信息楼东厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
 
         LatLng latlng = new LatLng(30.30730863394648,120.38926514664752);
-        aMap.addMarker(new MarkerOptions().position(latlng).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng).title("浙江工商大学教学区信息楼厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
 
         LatLng latlng2 = new LatLng(30.307601561292117,120.38861068765878);
-        aMap.addMarker(new MarkerOptions().position(latlng2).title("WC(厕所)").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
+        aMap.addMarker(new MarkerOptions().position(latlng2).title("浙江工商大学教学区公共厕所").icon(BitmapDescriptorFactory.fromResource(R.drawable.ww)));
     }
 
     /**
@@ -447,7 +447,7 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
 
         latlonToAddress(marker.getPosition());
 
-        showMsg("名称："+marker.getTitle()+"\n地址："+add+"\n距离："+ AMapUtils.calculateLineDistance(myLocation, marker.getPosition())+"米");
+        showMsg("名称："+marker.getTitle()+"\n距离："+ AMapUtils.calculateLineDistance(myLocation, marker.getPosition())+"米");
 
         textName.setText(marker.getTitle());
         if (marker != null) {
