@@ -41,7 +41,7 @@
         <service android:name="com.amap.api.location.APSService" /> <!-- 设置高德Key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="5eb92f774a29df8af58463ca577e1eab" />
+            android:value="3092393aac94eab3970a9e037bd07485" />
     </application>
 
 </manifest>

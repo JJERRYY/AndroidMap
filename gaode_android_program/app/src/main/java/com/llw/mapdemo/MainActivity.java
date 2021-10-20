@@ -86,8 +86,6 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //去掉顶部标题
-        getSupportActionBar().hide();
-
         setContentView(R.layout.activity_main);
 
 //        tvContent = findViewById(R.id.tv_content);

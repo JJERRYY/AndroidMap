@@ -10,7 +10,7 @@
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:layout_alignParentBottom="true"
-        android:text="designed by wjh and lyy"
+        android:text="Designed by wjh and lyy"
         tools:ignore="SmallSp" />
 
 </RelativeLayout>
