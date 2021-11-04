@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements AMapLocationListe
 
 //        tvContent = findViewById(R.id.tv_content);
 //        mapView=findViewById(R.id.map_view);
-//        mapView.onCreate(savedInstanceState);
+//        mapView.onCreate(s'avedInstanceState);
         initLocation();
         initMap(savedInstanceState);
         checkingAndroidVersion();
